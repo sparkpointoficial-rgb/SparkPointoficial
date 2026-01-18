@@ -42,7 +42,6 @@
 
         .ref-box { background: #020617; border: 1px dashed var(--primary); padding: 12px; border-radius: 12px; font-size: 0.8rem; word-break: break-all; cursor: pointer; text-align: center; color: #94a3b8; }
 
-        /* Скрытая админка */
         #adminSection { display: none; border: 2px solid var(--admin-red); background: rgba(239, 68, 68, 0.05); }
     </style>
 </head>
@@ -80,10 +79,9 @@
 </div>
 
 <script>
-    // ЗАМЕНИТЕ ЭТОТ АДРЕС ПОСЛЕ ДЕПЛОЯ
-    const CONTRACT_ADDRESS = "ВАШ_АДРЕС_КОНТРАКТА";
+    // АДРЕС ВАШЕГО КОНТРАКТА ВСТАВЛЕН
+    const CONTRACT_ADDRESS = "0x137cbBBb38962ABd3A3a0D212C1f408FBD92ffb8";
     
-    // Минимальный набор функций для работы сайта
     const CONTRACT_ABI = [
         "function users(address) view returns (uint256 level, address referrer, uint256 internalBalance, uint256 referralsInLevel, uint256 totalDirectReferrals, bool exists)",
         "function register(address _referrer) external payable",
@@ -94,59 +92,50 @@
     let provider, signer, contract;
 
     async function init() {
-        if (!window.ethereum) return alert("Пожалуйста, установите MetaMask!");
-        
+        if (!window.ethereum) return alert("Установите MetaMask!");
         provider = new ethers.providers.Web3Provider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
         signer = provider.getSigner();
         const address = await signer.getAddress();
         contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 
-        document.getElementById("walletAddr").innerText = "Подключен: " + address;
+        document.getElementById("walletAddr").innerText = "Кошелек: " + address;
 
-        // Проверка: является ли пользователь админом
         const owner = await contract.admin();
         if(address.toLowerCase() === owner.toLowerCase()) {
             document.getElementById("adminSection").style.display = "block";
         }
 
-        // Загрузка данных участника
         const data = await contract.users(address);
         if (data.exists) {
             let uLvl = data.level.toNumber();
-            
-            // Если уровень выше 5 — скрываем данные (согласно вашей просьбе)
             if (uLvl > 5) {
                 document.getElementById("userLevel").innerText = "VIP (Скрыто)";
-                document.getElementById("userBalance").innerText = "🔒 Заблокировано";
+                document.getElementById("userBalance").innerText = "🔒 Скрыто";
             } else {
                 document.getElementById("userLevel").innerText = uLvl;
                 document.getElementById("userBalance").innerText = ethers.utils.formatEther(data.internalBalance) + " BNB";
             }
-            
             document.getElementById("directRefs").innerText = data.totalDirectReferrals;
-            const link = window.location.origin + window.location.pathname + "?ref=" + address;
-            document.getElementById("refLinkText").innerText = link;
+            document.getElementById("refLinkText").innerText = window.location.origin + window.location.pathname + "?ref=" + address;
         } else {
-            document.getElementById("userLevel").innerText = "Не в проекте";
+            document.getElementById("userLevel").innerText = "0";
             document.getElementById("userBalance").innerText = "0";
             document.getElementById("directRefs").innerText = "0";
         }
 
-        // Авто-подстановка реферала из URL ссылки
         const urlParams = new URLSearchParams(window.location.search);
         if(urlParams.has('ref')) document.getElementById("refInput").value = urlParams.get('ref');
     }
 
     async function register() {
         try {
-            const ref = document.getElementById("refInput").value;
-            if(!ref) return alert("Нужен адрес пригласителя!");
+            const ref = document.getElementById("refInput").value || "0x0000000000000000000000000000000000000000";
             const tx = await contract.register(ref, { value: ethers.utils.parseEther("0.05") });
             await tx.wait();
-            alert("Успешная регистрация!");
+            alert("Успех!");
             location.reload();
-        } catch(e) { alert("Ошибка транзакции"); }
+        } catch(e) { alert("Ошибка!"); }
     }
 
     async function adminAdd() {
@@ -155,8 +144,8 @@
             const ref = document.getElementById("adminRefAddr").value;
             const tx = await contract.adminAddUser(user, ref);
             await tx.wait();
-            alert("Участник добавлен админом!");
-        } catch(e) { alert("У вас нет прав админа или ошибка в адресах"); }
+            alert("Участник добавлен!");
+        } catch(e) { alert("Ошибка доступа!"); }
     }
 
     function copyRef() {
