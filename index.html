@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+     <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -72,6 +72,7 @@
 
     <div id="adminSection" class="card">
         <h3 style="color: var(--admin-red); margin-top:0">🛠 Панель Управления</h3>
+        <p style="font-size: 0.8rem; color: #94a3b8;">Добавление участника на 1 уровень бесплатно</p>
         <input type="text" id="newMemberAddr" placeholder="Кошелек нового участника">
         <input type="text" id="adminRefAddr" placeholder="Кошелек пригласителя">
         <button style="background: var(--admin-red);" onclick="adminAdd()">Добавить Бесплатно</button>
@@ -79,7 +80,7 @@
 </div>
 
 <script>
-    // АДРЕС ВАШЕГО КОНТРАКТА ВСТАВЛЕН
+    // АДРЕС ВАШЕГО КОНТРАКТА ВСТАВЛЕН:
     const CONTRACT_ADDRESS = "0x137cbBBb38962ABd3A3a0D212C1f408FBD92ffb8";
     
     const CONTRACT_ABI = [
@@ -101,21 +102,18 @@
 
         document.getElementById("walletAddr").innerText = "Кошелек: " + address;
 
-        const owner = await contract.admin();
-        if(address.toLowerCase() === owner.toLowerCase()) {
-            document.getElementById("adminSection").style.display = "block";
-        }
+        try {
+            const owner = await contract.admin();
+            if(address.toLowerCase() === owner.toLowerCase()) {
+                document.getElementById("adminSection").style.display = "block";
+            }
+        } catch(e) { console.log("Ошибка проверки админа"); }
 
         const data = await contract.users(address);
         if (data.exists) {
             let uLvl = data.level.toNumber();
-            if (uLvl > 5) {
-                document.getElementById("userLevel").innerText = "VIP (Скрыто)";
-                document.getElementById("userBalance").innerText = "🔒 Скрыто";
-            } else {
-                document.getElementById("userLevel").innerText = uLvl;
-                document.getElementById("userBalance").innerText = ethers.utils.formatEther(data.internalBalance) + " BNB";
-            }
+            document.getElementById("userLevel").innerText = uLvl;
+            document.getElementById("userBalance").innerText = ethers.utils.formatEther(data.internalBalance) + " BNB";
             document.getElementById("directRefs").innerText = data.totalDirectReferrals;
             document.getElementById("refLinkText").innerText = window.location.origin + window.location.pathname + "?ref=" + address;
         } else {
@@ -135,7 +133,7 @@
             await tx.wait();
             alert("Успех!");
             location.reload();
-        } catch(e) { alert("Ошибка!"); }
+        } catch(e) { alert("Ошибка транзакции!"); }
     }
 
     async function adminAdd() {
@@ -145,7 +143,7 @@
             const tx = await contract.adminAddUser(user, ref);
             await tx.wait();
             alert("Участник добавлен!");
-        } catch(e) { alert("Ошибка доступа!"); }
+        } catch(e) { alert("Ошибка! Только админ может это делать."); }
     }
 
     function copyRef() {
