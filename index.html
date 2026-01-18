@@ -1,4 +1,4 @@
-     <!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -80,7 +80,7 @@
 </div>
 
 <script>
-    // АДРЕС ВАШЕГО КОНТРАКТА ВСТАВЛЕН:
+    // АДРЕС ВАШЕГО КОНТРАКТА ИЗ СКРИНШОТА:
     const CONTRACT_ADDRESS = "0x137cbBBb38962ABd3A3a0D212C1f408FBD92ffb8";
     
     const CONTRACT_ABI = [
@@ -93,37 +93,45 @@
     let provider, signer, contract;
 
     async function init() {
-        if (!window.ethereum) return alert("Установите MetaMask!");
-        provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        signer = provider.getSigner();
-        const address = await signer.getAddress();
-        contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-
-        document.getElementById("walletAddr").innerText = "Кошелек: " + address;
+        if (!window.ethereum) {
+            alert("Пожалуйста, откройте сайт внутри MetaMask или Mises!");
+            return;
+        }
 
         try {
+            // Принудительный запрос аккаунтов для мобильных устройств
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const address = accounts[0];
+
+            provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+            signer = provider.getSigner();
+            contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+            document.getElementById("walletAddr").innerText = "Кошелек: " + address;
+
+            // Проверка на админа
             const owner = await contract.admin();
             if(address.toLowerCase() === owner.toLowerCase()) {
                 document.getElementById("adminSection").style.display = "block";
             }
-        } catch(e) { console.log("Ошибка проверки админа"); }
 
-        const data = await contract.users(address);
-        if (data.exists) {
-            let uLvl = data.level.toNumber();
-            document.getElementById("userLevel").innerText = uLvl;
-            document.getElementById("userBalance").innerText = ethers.utils.formatEther(data.internalBalance) + " BNB";
-            document.getElementById("directRefs").innerText = data.totalDirectReferrals;
-            document.getElementById("refLinkText").innerText = window.location.origin + window.location.pathname + "?ref=" + address;
-        } else {
-            document.getElementById("userLevel").innerText = "0";
-            document.getElementById("userBalance").innerText = "0";
-            document.getElementById("directRefs").innerText = "0";
+            // Получение данных пользователя
+            const data = await contract.users(address);
+            if (data.exists) {
+                document.getElementById("userLevel").innerText = data.level.toString();
+                document.getElementById("userBalance").innerText = ethers.utils.formatEther(data.internalBalance) + " BNB";
+                document.getElementById("directRefs").innerText = data.totalDirectReferrals.toString();
+                document.getElementById("refLinkText").innerText = window.location.origin + window.location.pathname + "?ref=" + address;
+            } else {
+                document.getElementById("userLevel").innerText = "0";
+                document.getElementById("userBalance").innerText = "0";
+                document.getElementById("directRefs").innerText = "0";
+                document.getElementById("refLinkText").innerText = "Аккаунт не активирован";
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Ошибка подключения. Проверьте сеть BSC Testnet в кошельке.");
         }
-
-        const urlParams = new URLSearchParams(window.location.search);
-        if(urlParams.has('ref')) document.getElementById("refInput").value = urlParams.get('ref');
     }
 
     async function register() {
@@ -131,19 +139,20 @@
             const ref = document.getElementById("refInput").value || "0x0000000000000000000000000000000000000000";
             const tx = await contract.register(ref, { value: ethers.utils.parseEther("0.05") });
             await tx.wait();
-            alert("Успех!");
+            alert("Успех! Аккаунт активирован.");
             location.reload();
-        } catch(e) { alert("Ошибка транзакции!"); }
+        } catch(e) { alert("Ошибка транзакции! Проверьте баланс."); }
     }
 
     async function adminAdd() {
         try {
             const user = document.getElementById("newMemberAddr").value;
             const ref = document.getElementById("adminRefAddr").value;
+            if(!user || !ref) return alert("Заполните оба поля!");
             const tx = await contract.adminAddUser(user, ref);
             await tx.wait();
-            alert("Участник добавлен!");
-        } catch(e) { alert("Ошибка! Только админ может это делать."); }
+            alert("Участник успешно добавлен бесплатно!");
+        } catch(e) { alert("Ошибка! Проверьте, что вы админ и адрес участника верный."); }
     }
 
     function copyRef() {
@@ -158,3 +167,4 @@
 </script>
 </body>
 </html>
+        
