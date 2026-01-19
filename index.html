@@ -24,3 +24,110 @@
 <body>
 
     <div class="container">
+        <div class="card">
+            <h2>⚡ SparkPoint</h2>
+            <button class="btn-connect" id="btn-text" onclick="connect()">ПОДКЛЮЧИТЬ КОШЕЛЕК</button>
+            <div id="addr-display" class="status">Кошелек не подключен</div>
+        </div>
+
+        <div class="card">
+            <p style="color: #848e9c; margin-bottom: 5px;">Ваш баланс в системе:</p>
+            <h1 id="balance-display" style="margin: 0;">0.00 BNB</h1>
+        </div>
+
+        <div id="admin-panel" class="card">
+            <h3 style="color: #f6465d; margin-top: 0;">🛠 ПАНЕЛЬ АДМИНИСТРАТОРА</h3>
+            <p style="font-size: 13px; color: #ccc;">Бесплатное добавление участника (1 уровень)</p>
+            <input type="text" id="new-user-addr" placeholder="Адрес нового участника">
+            <input type="text" id="new-user-ref" placeholder="Адрес пригласителя">
+            <button class="btn-admin" onclick="addFreeUser()">ДОБАВИТЬ В СИСТЕМУ</button>
+        </div>
+    </div>
+
+<script>
+    // ПРЯМЫЕ ДАННЫЕ ТВОЕГО КОНТРАКТА
+    const CONTRACT_ADDRESS = "0x137cbBBb38962ABd3A3a0D212C1f408FBD92ffb8";
+    const CONTRACT_ABI = [{"inputs":[],"name":"admin","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"},{"internalType":"address","name":"_referrer","type":"address"}],"name":"adminAddUser","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"uint256","name":"level","type":"uint256"},{"internalType":"address","name":"referrer","type":"address"},{"internalType":"uint256","name":"internalBalance","type":"uint256"},{"internalType":"uint256","name":"referralsInLevel","type":"uint256"},{"internalType":"uint256","name":"totalDirectReferrals","type":"uint256"},{"internalType":"bool","name":"exists","type":"bool"}],"stateMutability":"view","type":"function"}];
+
+    let web3, contract, currentAccount;
+
+    async function connect() {
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                // 1. ПРОВЕРКА СЕТИ (BSC Testnet - 0x61)
+                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                if (chainId !== '0x61') {
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{ chainId: '0x61' }],
+                        });
+                    } catch (switchError) {
+                        if (switchError.code === 4902) {
+                            alert("Добавьте сеть BSC Testnet в MetaMask!");
+                        }
+                    }
+                }
+
+                // 2. ПОДКЛЮЧЕНИЕ АККАУНТА
+                web3 = new Web3(window.ethereum);
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                currentAccount = accounts[0];
+
+                document.getElementById('addr-display').innerText = "Аккаунт: " + currentAccount;
+                document.getElementById('btn-text').innerText = "✅ ПОДКЛЮЧЕНО";
+
+                // 3. ИНИЦИАЛИЗАЦИЯ КОНТРАКТА
+                contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+
+                // 4. ЗАГРУЗКА ДАННЫХ
+                loadUserData();
+
+            } catch (error) {
+                console.error(error);
+                alert("Ошибка подключения: " + error.message);
+            }
+        } else {
+            alert("Пожалуйста, откройте сайт через браузер MetaMask!");
+        }
+    }
+
+    async function loadUserData() {
+        try {
+            // Получаем данные пользователя из маппинга users
+            const userData = await contract.methods.users(currentAccount).call();
+            
+            // Отображаем баланс (internalBalance)
+            const balanceWei = userData.internalBalance;
+            const balanceEth = web3.utils.fromWei(balanceWei, 'ether');
+            document.getElementById('balance-display').innerText = balanceEth + " BNB";
+
+            // ПРОВЕРКА НА АДМИНА
+            const adminAddress = await contract.methods.admin().call();
+            if (currentAccount.toLowerCase() === adminAddress.toLowerCase()) {
+                document.getElementById('admin-panel').style.display = 'block';
+            }
+
+        } catch (e) {
+            console.error("Ошибка при чтении контракта:", e);
+        }
+    }
+
+    async function addFreeUser() {
+        const target = document.getElementById('new-user-addr').value;
+        const referrer = document.getElementById('new-user-ref').value;
+
+        if (!web3.utils.isAddress(target) || !web3.utils.isAddress(referrer)) {
+            return alert("Введите корректные адреса кошельков!");
+        }
+
+        try {
+            await contract.methods.adminAddUser(target, referrer).send({ from: currentAccount });
+            alert("Участник успешно добавлен!");
+        } catch (error) {
+            alert("Ошибка транзакции: " + error.message);
+        }
+    }
+</script>
+</body>
+</html>
