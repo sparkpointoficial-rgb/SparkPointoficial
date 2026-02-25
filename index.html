@@ -3,26 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetRun | Web3 Matrix</title>
+    <title>SparkPoint | Web3 Matrix</title>
     <style>
         :root {
             --gold: #ffcc00;
+            --gold-light: #ffe680;
             --green: #00ff88;
-            --bg: #050505;
-            --card: #121214;
+            --bg-dark: #050505;
+            --bg-light: #1a1a1d;
+            --card-bg: rgba(20, 20, 22, 0.7);
             --text: #e2e8f0;
             --red: #ff3e3e;
         }
 
         body {
-            background-color: var(--bg);
+            /* ИЗМЕНЕНО: Добавлен радиальный градиент для глубины фона */
+            background: radial-gradient(circle at top center, var(--bg-light), var(--bg-dark));
             color: var(--text);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding-bottom: 60px;
+            min-height: 100vh;
         }
 
         /* Шапка и Языки */
@@ -32,102 +36,166 @@
             justify-content: flex-end;
             padding: 15px 20px;
             box-sizing: border-box;
-            background: rgba(0,0,0,0.5);
+            /* ИЗМЕНЕНО: Более приятное размытие для верхней панели */
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .lang-btn {
-            background: #1e1e22;
+            background: rgba(255, 204, 0, 0.1);
             color: var(--gold);
             border: 1px solid var(--gold);
-            padding: 5px 12px;
+            padding: 6px 14px;
             cursor: pointer;
-            margin-left: 8px;
-            border-radius: 6px;
-            font-weight: bold;
+            margin-left: 10px;
+            border-radius: 8px;
+            font-weight: 700;
             font-size: 12px;
+            transition: 0.3s;
         }
 
-        .lang-btn.active { background: var(--gold); color: #000; }
+        .lang-btn:hover { background: rgba(255, 204, 0, 0.2); }
+        .lang-btn.active { background: var(--gold); color: #000; box-shadow: 0 0 10px rgba(255, 204, 0, 0.3); }
 
-        header { text-align: center; padding: 30px 0; }
+        header {
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
+        }
+        
+        /* ИЗМЕНЕНО: Добавлено фоновое свечение за заголовком */
+        header::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px; height: 100px;
+            background: var(--gold);
+            opacity: 0.15;
+            filter: blur(80px);
+            z-index: -1;
+        }
+
         .project-title {
-            color: var(--gold);
-            font-size: 2.5rem;
+            /* ИЗМЕНЕНО: Золотой градиентный текст и усиленное свечение */
+            background: linear-gradient(45deg, var(--gold), var(--gold-light), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 3rem;
             font-weight: 900;
             text-transform: uppercase;
-            text-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+            text-shadow: 0 0 25px rgba(255, 204, 0, 0.4);
             margin: 0;
+            letter-spacing: 1px;
         }
+
+        #sub-title { font-size: 1.1rem; opacity: 0.8; }
 
         /* Карточки */
         .container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            gap: 25px;
             max-width: 1100px;
             width: 90%;
+            margin-top: 20px;
         }
 
         .card {
-            background: var(--card);
-            border: 1px solid #222;
-            border-radius: 20px;
-            padding: 25px;
+            /* ИЗМЕНЕНО: Эффект матового стекла и улучшенные тени */
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 204, 0, 0.15);
+            border-radius: 24px;
+            padding: 30px 25px;
             text-align: center;
-            transition: 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
         }
 
-        .card:hover { border-color: var(--gold); transform: translateY(-5px); }
-        .price-tag { color: var(--gold); font-size: 2.2rem; font-weight: 800; margin: 15px 0; }
+        .card:hover {
+            border-color: var(--gold);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px -10px rgba(255, 204, 0, 0.2);
+        }
+
+        .card h2 { font-size: 1.8rem; margin-top: 0; }
+        
+        .price-tag {
+            color: var(--gold);
+            font-size: 2.4rem;
+            font-weight: 900;
+            margin: 20px 0;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
+        }
 
         /* Кнопки */
         .btn {
             display: block;
             width: 100%;
-            padding: 14px;
-            margin-top: 10px;
-            border-radius: 12px;
+            padding: 16px;
+            margin-top: 12px;
+            border-radius: 14px;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 800;
             text-transform: uppercase;
             border: none;
             cursor: pointer;
             font-size: 14px;
             transition: 0.3s;
+            letter-spacing: 0.5px;
         }
 
-        .btn-info { background: var(--gold); color: #000; }
+        .btn-info {
+            background: rgba(255, 204, 0, 0.1);
+            color: var(--gold);
+            border: 1px solid rgba(255, 204, 0, 0.3);
+        }
+        .btn-info:hover { background: var(--gold); color: #000; }
+
         .btn-buy {
             background: #2a2a2e;
-            color: #555;
+            color: #666;
             pointer-events: none;
-            opacity: 0.6;
+            opacity: 0.5;
+            font-weight: 700;
         }
         .btn-buy.active {
-            background: var(--green);
+            /* ИЗМЕНЕНО: Более яркая активная кнопка */
+            background: linear-gradient(45deg, var(--green), #00cc6a);
             color: #000;
             pointer-events: auto;
             opacity: 1;
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.4);
+            transform: scale(1.02);
         }
 
         /* Центр управления */
         .actions {
-            margin: 40px 0;
+            margin: 50px 0;
             width: 90%;
             max-width: 450px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
         }
 
-        .btn-video { background: var(--red); color: white; border: none; }
-        .btn-rules { background: transparent; color: var(--gold); border: 1px dashed var(--gold); }
+        .btn-video { background: var(--red); color: white; border: none; box-shadow: 0 5px 15px rgba(255, 62, 62, 0.3); }
+        .btn-video:hover { background: #ff2222; }
+        
+        .btn-rules {
+            background: rgba(255, 204, 0, 0.05);
+            color: var(--gold);
+            border: 1px dashed var(--gold);
+        }
+        .btn-rules:hover { background: rgba(255, 204, 0, 0.1); }
 
-        /* Модалка Видео */
+        /* Остальные стили (модалки, чекбокс) без изменений */
         .modal {
             display: none;
             position: fixed;
@@ -136,43 +204,43 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(5px);
         }
-
         .modal-content { width: 95%; max-width: 800px; position: relative; }
-        .video-box { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 12px; overflow: hidden; }
+        .video-box { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .close { position: absolute; top: -45px; right: 0; color: #fff; font-size: 35px; cursor: pointer; }
+        .close { position: absolute; top: -45px; right: 0; color: #fff; font-size: 35px; cursor: pointer; transition: 0.3s; }
+        .close:hover { color: var(--red); }
 
-        /* Блок Инструкции */
         #rules-block {
             display: none;
             max-width: 800px;
             width: 90%;
             background: #0f0f11;
-            padding: 25px;
-            border-radius: 18px;
+            padding: 30px;
+            border-radius: 24px;
             border: 1px solid #222;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-
-        .rules-text h3 { color: var(--gold); border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .rules-text p { font-size: 0.95rem; line-height: 1.6; color: #b0b0b0; }
+        .rules-text h3 { color: var(--gold); border-bottom: 1px solid #333; padding-bottom: 15px; margin-top: 0; }
+        .rules-text p { font-size: 1rem; line-height: 1.7; color: #b0b0b0; }
         .rules-text b { color: #fff; }
 
-        /* Галочка */
         .agree-container {
             display: flex;
             align-items: center;
-            gap: 12px;
-            background: #161618;
-            padding: 18px;
-            border-radius: 12px;
+            gap: 15px;
+            background: rgba(0, 255, 136, 0.05);
+            padding: 20px;
+            border-radius: 16px;
             border: 1px solid var(--green);
-            margin-top: 25px;
+            margin-top: 30px;
             cursor: pointer;
+            transition: 0.3s;
         }
-
-        .agree-container input { width: 22px; height: 22px; cursor: pointer; accent-color: var(--green); }
+        .agree-container:hover { background: rgba(0, 255, 136, 0.1); }
+        .agree-container input { width: 24px; height: 24px; cursor: pointer; accent-color: var(--green); }
     </style>
 </head>
 <body>
@@ -183,8 +251,8 @@
 </div>
 
 <header>
-    <h1 class="project-title">⚡ NETRUN 💎</h1>
-    <p id="sub-title" style="color: #64748b; margin-top: 10px;">Premium Web3 Matrix Ecosystem</p>
+    <h1 class="project-title">⚡ SPARK POINT 💎</h1>
+    <p id="sub-title" style="color: #8a9ab8; margin-top: 12px; font-weight: 500;">Premium Web3 Matrix Ecosystem</p>
 </header>
 
 <div class="container">
@@ -192,35 +260,35 @@
         <h2>🚀 Flash</h2>
         <div class="price-tag">0.08 BNB</div>
         <button class="btn btn-info lang-view" onclick="showInfo(0)">Посмотреть</button>
-        <a href="https://creditscoringchain-sketch.github.io/SparkPoint303/?ref=0xc50970499f45d8e6fd943a09407ca8121379991" class="btn btn-buy lang-buy">Купить</a>
+        <a href="#" class="btn btn-buy lang-buy">Купить</a>
     </div>
 
     <div class="card">
         <h2>💰 Rapid</h2>
         <div class="price-tag">0.15 BNB</div>
         <button class="btn btn-info lang-view" onclick="showInfo(1)">Посмотреть</button>
-        <a href="https://creditscoringchain-sketch.github.io/SparkPoint303/?ref=0xc50970499f45d8e6fd943a09407ca8121379991" class="btn btn-buy lang-buy">Купить</a>
+        <a href="#" class="btn btn-buy lang-buy">Купить</a>
     </div>
 
     <div class="card">
         <h2>🛡️ Vault</h2>
         <div class="price-tag">0.02 BNB</div>
         <button class="btn btn-info lang-view" onclick="showInfo(2)">Посмотреть</button>
-        <a href="https://creditscoringchain-sketch.github.io/SparkPoint303/?ref=0xc50970499f45d8e6fd943a09407ca8121379991" class="btn btn-buy lang-buy">Купить</a>
+        <a href="#" class="btn btn-buy lang-buy">Купить</a>
     </div>
 
     <div class="card">
         <h2>💵 Validator</h2>
         <div class="price-tag">0.05 BNB</div>
         <button class="btn btn-info lang-view" onclick="showInfo(3)">Посмотреть</button>
-        <a href="https://creditscoringchain-sketch.github.io/SparkPoint303/?ref=0xc50970499f45d8e6fd943a09407ca8121379991" class="btn btn-buy lang-buy">Купить</a>
+        <a href="#" class="btn btn-buy lang-buy">Купить</a>
     </div>
 
     <div class="card">
         <h2>👑 Genesis</h2>
         <div class="price-tag">0.08 BNB</div>
         <button class="btn btn-info lang-view" onclick="showInfo(4)">Посмотреть</button>
-        <a href="https://creditscoringchain-sketch.github.io/SparkPoint303/?ref=0xc50970499f45d8e6fd943a09407ca8121379991" class="btn btn-buy lang-buy">Купить</a>
+        <a href="#" class="btn btn-buy lang-buy">Купить</a>
     </div>
 </div>
 
@@ -242,7 +310,7 @@
     <div id="full-text" class="rules-text"></div>
     <div class="agree-container" onclick="handleCheck()">
         <input type="checkbox" id="mainCheck">
-        <label for="mainCheck" id="txt-agree" style="cursor:pointer">Я прочитал правила и беру ответственность на себя</label>
+        <label for="mainCheck" id="txt-agree" style="cursor:pointer; font-weight: 600;">Я прочитал правила и беру ответственность на себя</label>
     </div>
 </div>
 
@@ -252,44 +320,44 @@
             vidBtn: "Видео инструкция регистрации",
             rulesBtn: "Открыть инструкцию и правила",
             agree: "Я прочитал правила и беру ответственность на себя",
-            view: "Посмотреть",
-            buy: "Купить",
+            view: "Подробнее",
+            buy: "Активировать",
             info: ["Flash: Высокая доходность", "Rapid: Максимальная доходность", "Vault: Возврат после 2-х", "Validator: Возврат после 2-х", "Genesis: Возврат после 2-х"],
             rules: `
-                <h3>ПРАВИЛА УЧАСТИЯ И ИНСТРУКЦИЯ</h3>
+                <h3>ПРАВИЛА УЧАСТИЯ SPARK POINT</h3>
                 <p><b>1. Классификация пакетов</b><br>
                 • <b>Скоростные (Flash, Rapid):</b> Предназначены для максимально быстрого прохождения уровней. Входная сумма включена в общую прибыль на выходе.<br>
                 • <b>Масштабные (Vault, Validator, Genesis):</b> Пакеты на 10 уровней с функцией «Безопасного старта». Как только вы приглашаете 2-х участников, смарт-контракт мгновенно возвращает сумму вашего входа.</p>
-                <p><b>2. Механика работы смарт-контракта</b><br>
-                • Все процессы происходят на автопилоте.<br>
+                <p><b>2. Механика работы</b><br>
+                • Все процессы происходят на автопилоте в блокчейне.<br>
                 • Смарт-контракт децентрализован: у администрации нет доступа к вашим средствам.<br>
                 • Ваша задача: Пригласить минимум 2-х активных участников.</p>
                 <p><b>3. Юридический отказ (Disclaimer)</b><br>
-                • <b>Это не инвестиции:</b> NetRun — это краудфандинговая P2P-платформа.<br>
+                • <b>Это не инвестиции:</b> Spark Point — это краудфандинговая P2P-платформа.<br>
                 • <b>Отсутствие гарантий:</b> Результат напрямую зависит от вашей активности.<br>
-                • <b>Никаких возвратов:</b> Вход является добровольным взносом за активацию смарт-контракта.</p>
+                • <b>Никаких возвратов:</b> Вход является добровольным взносом за активацию.</p>
             `
         },
         en: {
             vidBtn: "Registration Video Guide",
             rulesBtn: "Open Instructions & Rules",
             agree: "I have read the rules and take responsibility",
-            view: "View",
-            buy: "Buy",
+            view: "Details",
+            buy: "Activate",
             info: ["Flash: High Profit", "Rapid: Maximum Profit", "Vault: Return after 2", "Validator: Return after 2", "Genesis: Return after 2"],
             rules: `
-                <h3>PARTICIPATION RULES</h3>
+                 <h3>SPARK POINT RULES</h3>
                 <p><b>1. Package Classification</b><br>
                 • <b>Speed (Flash, Rapid):</b> Designed for fast completion. Entry fee is part of the final profit.<br>
                 • <b>Scale (Vault, Validator, Genesis):</b> 10-level packages with "Safe Start". Entry fee returns after inviting 2 members.</p>
-                <p><b>2. Smart Contract</b><br>
-                • All processes are automated.<br>
+                <p><b>2. Smart Contract Logic</b><br>
+                • All processes are automated on blockchain.<br>
                 • Decentralized: No admin access to funds.<br>
                 • Task: Invite at least 2 active members.</p>
                 <p><b>3. Disclaimer</b><br>
-                • <b>Not investment:</b> P2P crowdfunding platform.<br>
+                • <b>Not investment:</b> Spark Point is P2P crowdfunding.<br>
                 • <b>No Guarantees:</b> Results depend on your activity.<br>
-                • <b>No Refunds:</b> Entry is a voluntary fee for contract activation.</p>
+                • <b>No Refunds:</b> Entry is a voluntary fee for activation.</p>
             `
         }
     };
@@ -311,6 +379,7 @@
     function toggleRules() {
         const b = document.getElementById('rules-block');
         b.style.display = b.style.display === 'block' ? 'none' : 'block';
+        if(b.style.display === 'block') b.scrollIntoView({behavior: "smooth"});
     }
 
     function openVid() {
@@ -336,5 +405,4 @@
     setLang('ru');
 </script>
 </body>
-  </html>
-  
+</html>
