@@ -37,9 +37,9 @@
             background: #111;
             color: var(--gold);
             border: 1px solid var(--gold);
-            padding: 5px 10px;
-            margin-left: 5px;
-            border-radius: 4px;
+            padding: 5px 12px;
+            margin-left: 8px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
         }
@@ -49,82 +49,81 @@
         header { text-align: center; margin: 20px 0 40px; }
         
         .diamond-icon {
-            font-size: 45px;
+            font-size: 50px;
             display: block;
             margin-bottom: 10px;
-            filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.5));
+            filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.6));
         }
 
-        /* SparkPoint с эффектом полосок */
         .spark-title {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 900;
             text-transform: uppercase;
             margin: 0;
             background: repeating-linear-gradient(
-                45deg,
+                -45deg,
                 #ffcc00,
-                #ffcc00 5px,
-                #ffdb4d 5px,
-                #ffdb4d 10px
+                #ffcc00 6px,
+                #ffe066 6px,
+                #ffe066 12px
             );
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 8px rgba(255, 204, 0, 0.2));
+            filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.3));
         }
 
         .container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            max-width: 1100px;
-            width: 90%;
+            gap: 25px;
+            max-width: 1200px;
+            width: 95%;
         }
 
         .card {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 30px 20px;
+            border-radius: 24px;
+            padding: 35px 20px;
             text-align: center;
             border: 1px solid #222;
-            transition: 0.3s;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .card:hover { border-color: var(--gold); }
-        .card-icon { font-size: 30px; margin-bottom: 10px; display: block; }
-        .price { color: var(--gold); font-size: 2.2rem; font-weight: 800; margin: 15px 0; }
+        .card:hover { border-color: var(--gold); transform: translateY(-5px); }
+        .card-icon { font-size: 35px; margin-bottom: 15px; display: block; }
+        .price { color: var(--gold); font-size: 2.4rem; font-weight: 800; margin: 20px 0; }
 
         .btn {
             display: block;
             width: 100%;
-            padding: 15px;
-            margin-top: 10px;
-            border-radius: 12px;
+            padding: 16px;
+            margin-top: 12px;
+            border-radius: 14px;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 800;
             text-transform: uppercase;
             border: none;
             cursor: pointer;
             font-size: 14px;
+            transition: 0.3s;
         }
 
         .btn-view { background: var(--gold); color: #000; }
-        
         .btn-buy { background: var(--btn-gray); color: #444; pointer-events: none; }
         
         .btn-buy.active {
-            background: linear-gradient(90deg, #00ff88, #00cc6a);
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
             color: #000;
             pointer-events: auto;
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
         }
 
-        .footer-actions { margin-top: 40px; width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 12px; }
+        .footer-actions { margin: 50px 0; width: 90%; max-width: 450px; display: flex; flex-direction: column; gap: 15px; }
         .btn-vid { background: #ff3e3e; color: #fff; }
         .btn-rules { background: transparent; border: 1px dashed var(--gold); color: var(--gold); }
 
-        #rules-box { display: none; background: #111; padding: 25px; border-radius: 15px; margin-top: 20px; border: 1px solid #222; width: 90%; max-width: 800px; }
-        .check-area { display: flex; align-items: center; gap: 10px; margin-top: 20px; cursor: pointer; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; }
+        #rules-box { display: none; background: #0f0f11; padding: 30px; border-radius: 20px; margin-top: 25px; border: 1px solid #222; width: 90%; max-width: 800px; }
+        .check-area { display: flex; align-items: center; gap: 12px; margin-top: 25px; cursor: pointer; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 14px; border: 1px solid rgba(0, 255, 136, 0.2); }
     </style>
 </head>
 <body>
@@ -137,7 +136,7 @@
 <header>
     <span class="diamond-icon">💎</span>
     <h1 class="spark-title">SparkPoint</h1>
-    <p style="color: #666;">Premium Web3 Matrix Ecosystem</p>
+    <p style="color: #64748b; font-weight: 500;">Premium Web3 Matrix Ecosystem</p>
 </header>
 
 <div class="container">
@@ -183,7 +182,7 @@
 </div>
 
 <div class="footer-actions">
-    <button class="btn btn-vid">📺 <span id="t-vid">Видео инструкция регистрации</span></button>
+    <button class="btn btn-vid" onclick="alert('Видео загружается...')">📺 <span id="t-vid">Видео инструкция регистрации</span></button>
     <button class="btn btn-rules" id="t-rules-btn" onclick="tRules()">Открыть инструкцию и правила</button>
 </div>
 
@@ -191,7 +190,7 @@
     <div id="rules-text"></div>
     <div class="check-area" onclick="handleCheck()">
         <input type="checkbox" id="cbox">
-        <label id="t-agree" style="cursor:pointer">Я прочитал правила и согласен</label>
+        <label id="t-agree" style="cursor:pointer; font-weight: 600;">Я прочитал правила и согласен</label>
     </div>
 </div>
 
@@ -200,14 +199,27 @@
         ru: {
             view: "Посмотреть", buy: "Активировать", vid: "Видео инструкция регистрации",
             rulesBtn: "Открыть инструкцию и правила", agree: "Я прочитал правила и беру ответственность на себя",
-            info: ["Flash: Скорость", "Rapid: Прибыль", "Vault: Защита", "Validator: Стабильность", "Genesis: Лидерство"],
-            rules: "<h3>ПРАВИЛА</h3><p>1. Вход P2P через смарт-контракт.<br>2. Пригласите 2-х человек для окупаемости.<br>3. Работайте с командой.</p>"
+            // ВОССТАНОВЛЕНО: Полное описание пакетов
+            info: [
+                "🚀 FLASH: Скоростной пакет. Доход направлен на быстрое прохождение 3-х уровней. Выплата включена в общую прибыль.",
+                "💰 RAPID: Максимально быстрый пакет. Цель — финальная выплата 1200$ (в эквиваленте BNB). Прохождение 3-х уровней.",
+                "🛡️ VAULT: Пакет на 10 уровней с функцией «Безопасного старта». После 2-х приглашенных — возврат суммы входа.",
+                "💵 VALIDATOR: 10 уровней. Функция окупаемости после 2-х участников. Дальнейшая работа с чистой прибылью.",
+                "👑 GENESIS: Элитный пакет на 10 уровней. Возврат средств после приглашения 2-х активных участников."
+            ],
+            rules: "<h3>ПРАВИЛА SPARKPOINT</h3><p>• Система работает через децентрализованный смарт-контракт.<br>• Пригласите 2-х участников для мгновенного возврата средств.<br>• Все транзакции проходят P2P напрямую на ваш кошелек.</p>"
         },
         en: {
-            view: "View", buy: "Activate", vid: "Video Instruction",
+            view: "View", buy: "Activate", vid: "Video Manual",
             rulesBtn: "Open Rules", agree: "I accept the rules and take responsibility",
-            info: ["Flash: Speed", "Rapid: Profit", "Vault: Safe", "Validator: Steady", "Genesis: King"],
-            rules: "<h3>RULES</h3><p>1. P2P entry via smart contract.<br>2. Invite 2 members for ROI.<br>3. Build your network.</p>"
+            info: [
+                "🚀 FLASH: High speed package. 3 levels completion. Entry fee included in final profit.",
+                "💰 RAPID: Fast track package. Target: 1200$ profit. 3 levels completion.",
+                "🛡️ VAULT: 10 levels with Safe Start. Entry fee returns after inviting 2 members.",
+                "💵 VALIDATOR: 10 levels. ROI after 2 participants. Pure profit focus thereafter.",
+                "👑 GENESIS: Elite 10-level package. Refund after 2 active members invited."
+            ],
+            rules: "<h3>SPARKPOINT RULES</h3><p>• Decentralized smart contract system.<br>• Invite 2 members for instant ROI.<br>• P2P transactions directly to your wallet.</p>"
         }
     };
 
