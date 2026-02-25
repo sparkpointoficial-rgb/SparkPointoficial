@@ -7,322 +7,239 @@
     <style>
         :root {
             --gold: #ffcc00;
-            --blue-bright: #00d4ff;
-            --bg-black: #0a0a0a;
-            --card-gray: #151517;
-            --text-light: #f0f0f0;
-            --green-glow: #00ffa3;
+            --blue-diamond: #00d4ff;
+            --bg: #0a0a0b;
+            --card-bg: #141416;
+            --btn-gray: #1e1e20;
+            --text-main: #f0f0f0;
         }
 
         body {
-            background-color: var(--bg-black);
-            color: var(--text-light);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-bottom: 80px;
+            padding-bottom: 60px;
         }
 
-        /* Шапка */
-        .top-nav {
+        .top-bar {
             width: 100%;
             display: flex;
             justify-content: flex-end;
-            padding: 20px;
+            padding: 15px 20px;
             box-sizing: border-box;
         }
 
-        .lang-switch {
-            display: flex;
-            gap: 5px;
-        }
-
         .l-btn {
-            background: #1a1a1a;
+            background: #111;
             color: var(--gold);
             border: 1px solid var(--gold);
-            padding: 6px 12px;
+            padding: 5px 10px;
+            margin-left: 5px;
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 13px;
         }
 
         .l-btn.active { background: var(--gold); color: #000; }
 
-        /* Логотип и Название */
-        header {
-            text-align: center;
-            margin-top: 10px;
-            margin-bottom: 40px;
-        }
-
-        .brand-icon {
-            font-size: 50px;
-            margin-bottom: 10px;
+        header { text-align: center; margin: 20px 0 40px; }
+        
+        .diamond-icon {
+            font-size: 45px;
             display: block;
-            filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.6));
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.5));
         }
 
-        /* ИЗМЕНЕНО: Стилизация SparkPoint (полоски и оттенки) */
+        /* SparkPoint с эффектом полосок */
         .spark-title {
-            font-size: 3.2rem;
+            font-size: 3rem;
             font-weight: 900;
             text-transform: uppercase;
             margin: 0;
-            letter-spacing: -1px;
-            /* Эффект полосатого градиента */
             background: repeating-linear-gradient(
-                -45deg,
+                45deg,
                 #ffcc00,
-                #ffcc00 4px,
-                #ffeb80 4px,
-                #ffeb80 8px
+                #ffcc00 5px,
+                #ffdb4d 5px,
+                #ffdb4d 10px
             );
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.3));
+            filter: drop-shadow(0 0 8px rgba(255, 204, 0, 0.2));
         }
 
-        .hero-desc {
-            color: #666;
-            font-size: 1.1rem;
-            margin-top: 15px;
-        }
-
-        /* Контейнер карточек */
-        .cards-grid {
+        .container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
             width: 90%;
-            max-width: 1200px;
         }
 
-        .card-item {
-            background: var(--card-gray);
-            border-radius: 24px;
-            padding: 40px 20px;
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px 20px;
             text-align: center;
             border: 1px solid #222;
             transition: 0.3s;
         }
 
-        .card-item:hover {
-            border-color: var(--gold);
-            transform: translateY(-5px);
-        }
+        .card:hover { border-color: var(--gold); }
+        .card-icon { font-size: 30px; margin-bottom: 10px; display: block; }
+        .price { color: var(--gold); font-size: 2.2rem; font-weight: 800; margin: 15px 0; }
 
-        .card-icon { font-size: 30px; margin-bottom: 15px; display: block; }
-        
-        .card-name {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .card-price {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--gold);
-            margin: 20px 0;
-        }
-
-        /* Кнопки как на старом скрине */
-        .action-btn {
+        .btn {
             display: block;
             width: 100%;
-            padding: 18px;
-            margin-top: 12px;
+            padding: 15px;
+            margin-top: 10px;
             border-radius: 12px;
             text-decoration: none;
-            font-weight: 800;
+            font-weight: bold;
             text-transform: uppercase;
             border: none;
             cursor: pointer;
-            font-size: 15px;
-            transition: 0.2s;
+            font-size: 14px;
         }
 
-        .btn-gray {
-            background: #1f1f22;
-            color: #444;
-            pointer-events: none;
-        }
-
-        .btn-yellow {
-            background: var(--gold);
-            color: #000;
-        }
-
-        .btn-green {
-            background: linear-gradient(to right, #00ff88, #00cc6a);
-            color: #000;
-            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.3);
-        }
-
-        .btn-green:active { transform: scale(0.98); }
-
-        /* Центр управления */
-        .bottom-actions {
-            margin-top: 50px;
-            width: 90%;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .btn-video { background: #ff3e3e; color: #fff; }
-        .btn-outline { background: transparent; border: 1px dashed var(--gold); color: var(--gold); }
-
-        /* Модалки и Чекбоксы */
-        .checkbox-wrap {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: rgba(255,255,255,0.03);
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px solid #333;
-            margin-top: 20px;
-            cursor: pointer;
-        }
+        .btn-view { background: var(--gold); color: #000; }
         
-        .checkbox-wrap input { width: 20px; height: 20px; accent-color: var(--gold); }
-
-        #rules-section {
-            display: none;
-            width: 90%;
-            max-width: 800px;
-            background: #111;
-            padding: 30px;
-            border-radius: 20px;
-            margin-top: 30px;
-            border: 1px solid #222;
+        .btn-buy { background: var(--btn-gray); color: #444; pointer-events: none; }
+        
+        .btn-buy.active {
+            background: linear-gradient(90deg, #00ff88, #00cc6a);
+            color: #000;
+            pointer-events: auto;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
         }
+
+        .footer-actions { margin-top: 40px; width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 12px; }
+        .btn-vid { background: #ff3e3e; color: #fff; }
+        .btn-rules { background: transparent; border: 1px dashed var(--gold); color: var(--gold); }
+
+        #rules-box { display: none; background: #111; padding: 25px; border-radius: 15px; margin-top: 20px; border: 1px solid #222; width: 90%; max-width: 800px; }
+        .check-area { display: flex; align-items: center; gap: 10px; margin-top: 20px; cursor: pointer; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="top-nav">
-    <div class="lang-switch">
-        <button id="ru-l" class="l-btn active" onclick="changeL('ru')">RU</button>
-        <button id="en-l" class="l-btn" onclick="changeL('en')">EN</button>
-    </div>
+<div class="top-bar">
+    <button id="ru" class="l-btn active" onclick="setL('ru')">RU</button>
+    <button id="en" class="l-btn" onclick="setL('en')">EN</button>
 </div>
 
 <header>
-    <span class="brand-icon">💎</span>
+    <span class="diamond-icon">💎</span>
     <h1 class="spark-title">SparkPoint</h1>
-    <div class="hero-desc">Premium Web3 Matrix Ecosystem</div>
+    <p style="color: #666;">Premium Web3 Matrix Ecosystem</p>
 </header>
 
-<div class="cards-grid">
-    <div class="card-item">
+<div class="container">
+    <div class="card">
         <span class="card-icon">🚀</span>
-        <div class="card-name">Flash</div>
-        <div class="card-price">0.08 BNB</div>
-        <button class="action-btn btn-yellow l-view" onclick="openInfo(0)">Посмотреть</button>
-        <a href="#" class="action-btn btn-gray l-buy">Активировать</a>
+        <h2>Flash</h2>
+        <div class="price">0.08 BNB</div>
+        <button class="btn btn-view t-view" onclick="sInfo(0)">Посмотреть</button>
+        <a href="#" class="btn btn-buy t-buy">Активировать</a>
     </div>
 
-    <div class="card-item">
+    <div class="card">
         <span class="card-icon">💰</span>
-        <div class="card-name">Rapid</div>
-        <div class="card-price">0.15 BNB</div>
-        <button class="action-btn btn-yellow l-view" onclick="openInfo(1)">Посмотреть</button>
-        <a href="#" class="action-btn btn-gray l-buy">Активировать</a>
+        <h2>Rapid</h2>
+        <div class="price">0.15 BNB</div>
+        <button class="btn btn-view t-view" onclick="sInfo(1)">Посмотреть</button>
+        <a href="#" class="btn btn-buy t-buy">Активировать</a>
     </div>
 
-    <div class="card-item">
+    <div class="card">
         <span class="card-icon">🛡️</span>
-        <div class="card-name">Vault</div>
-        <div class="card-price">0.02 BNB</div>
-        <button class="action-btn btn-yellow l-view" onclick="openInfo(2)">Посмотреть</button>
-        <a href="#" class="action-btn btn-gray l-buy">Активировать</a>
+        <h2>Vault</h2>
+        <div class="price">0.02 BNB</div>
+        <button class="btn btn-view t-view" onclick="sInfo(2)">Посмотреть</button>
+        <a href="#" class="btn btn-buy t-buy">Активировать</a>
+    </div>
+
+    <div class="card">
+        <span class="card-icon">💵</span>
+        <h2>Validator</h2>
+        <div class="price">0.05 BNB</div>
+        <button class="btn btn-view t-view" onclick="sInfo(3)">Посмотреть</button>
+        <a href="#" class="btn btn-buy t-buy">Активировать</a>
+    </div>
+
+    <div class="card">
+        <span class="card-icon">👑</span>
+        <h2>Genesis</h2>
+        <div class="price">0.08 BNB</div>
+        <button class="btn btn-view t-view" onclick="sInfo(4)">Посмотреть</button>
+        <a href="#" class="btn btn-buy t-buy">Активировать</a>
     </div>
 </div>
 
-<div class="bottom-actions">
-    <button class="action-btn btn-video" onclick="alert('Видео загружается...')">📺 <span id="v-text">Видео инструкция</span></button>
-    <button class="action-btn btn-outline" id="r-text" onclick="showRules()">Открыть инструкцию</button>
+<div class="footer-actions">
+    <button class="btn btn-vid">📺 <span id="t-vid">Видео инструкция регистрации</span></button>
+    <button class="btn btn-rules" id="t-rules-btn" onclick="tRules()">Открыть инструкцию и правила</button>
 </div>
 
-<div id="rules-section">
-    <div id="rules-content"></div>
-    <div class="checkbox-wrap" onclick="toggleMainCheck()">
-        <input type="checkbox" id="agreeCheck">
-        <label id="agree-label" style="cursor:pointer">Я принимаю условия и правила</label>
+<div id="rules-box">
+    <div id="rules-text"></div>
+    <div class="check-area" onclick="handleCheck()">
+        <input type="checkbox" id="cbox">
+        <label id="t-agree" style="cursor:pointer">Я прочитал правила и согласен</label>
     </div>
 </div>
 
 <script>
-    const translations = {
+    const langData = {
         ru: {
-            view: "Посмотреть",
-            buy: "Активировать",
-            v: "Видео инструкция регистрации",
-            r: "Открыть инструкцию и правила",
-            a: "Я прочитал правила и беру ответственность на себя",
-            info: ["Flash: Высокая скорость", "Rapid: Максимум прибыли", "Vault: Безопасный старт"],
-            rules: "<h3>ПРАВИЛА SparkPoint</h3><p>1. Пригласите 2-х друзей для возврата входа.<br>2. Система работает на смарт-контракте.<br>3. Средства распределяются P2P.</p>"
+            view: "Посмотреть", buy: "Активировать", vid: "Видео инструкция регистрации",
+            rulesBtn: "Открыть инструкцию и правила", agree: "Я прочитал правила и беру ответственность на себя",
+            info: ["Flash: Скорость", "Rapid: Прибыль", "Vault: Защита", "Validator: Стабильность", "Genesis: Лидерство"],
+            rules: "<h3>ПРАВИЛА</h3><p>1. Вход P2P через смарт-контракт.<br>2. Пригласите 2-х человек для окупаемости.<br>3. Работайте с командой.</p>"
         },
         en: {
-            view: "Details",
-            buy: "Activate",
-            v: "Registration Video Guide",
-            r: "Open Rules & Instructions",
-            a: "I have read the rules and take responsibility",
-            info: ["Flash: High Speed", "Rapid: Max Profit", "Vault: Safe Start"],
-            rules: "<h3>SparkPoint RULES</h3><p>1. Invite 2 friends to get a refund.<br>2. System runs on smart contract.<br>3. P2P distribution.</p>"
+            view: "View", buy: "Activate", vid: "Video Instruction",
+            rulesBtn: "Open Rules", agree: "I accept the rules and take responsibility",
+            info: ["Flash: Speed", "Rapid: Profit", "Vault: Safe", "Validator: Steady", "Genesis: King"],
+            rules: "<h3>RULES</h3><p>1. P2P entry via smart contract.<br>2. Invite 2 members for ROI.<br>3. Build your network.</p>"
         }
     };
 
-    let currentL = 'ru';
+    let curL = 'ru';
 
-    function changeL(lang) {
-        currentL = lang;
-        document.getElementById('ru-l').classList.toggle('active', lang === 'ru');
-        document.getElementById('en-l').classList.toggle('active', lang === 'en');
-        
-        document.getElementById('v-text').innerText = translations[lang].v;
-        document.getElementById('r-text').innerText = translations[lang].r;
-        document.getElementById('agree-label').innerText = translations[lang].a;
-        document.getElementById('rules-content').innerHTML = translations[lang].rules;
-        
-        document.querySelectorAll('.l-view').forEach(el => el.innerText = translations[lang].view);
-        document.querySelectorAll('.l-buy').forEach(el => el.innerText = translations[lang].buy);
+    function setL(l) {
+        curL = l;
+        document.getElementById('ru').classList.toggle('active', l==='ru');
+        document.getElementById('en').classList.toggle('active', l==='en');
+        document.getElementById('t-vid').innerText = langData[l].vid;
+        document.getElementById('t-rules-btn').innerText = langData[l].rulesBtn;
+        document.getElementById('t-agree').innerText = langData[l].agree;
+        document.getElementById('rules-text').innerHTML = langData[l].rules;
+        document.querySelectorAll('.t-view').forEach(b => b.innerText = langData[l].view);
+        document.querySelectorAll('.t-buy').forEach(b => b.innerText = langData[l].buy);
     }
 
-    function showRules() {
-        const sec = document.getElementById('rules-section');
-        sec.style.display = sec.style.display === 'block' ? 'none' : 'block';
+    function tRules() {
+        const box = document.getElementById('rules-box');
+        box.style.display = box.style.display === 'block' ? 'none' : 'block';
     }
 
-    function toggleMainCheck() {
-        const check = document.getElementById('agreeCheck');
-        if (event.target.id !== 'agreeCheck') check.checked = !check.checked;
-        
-        document.querySelectorAll('.l-buy').forEach(btn => {
-            if (check.checked) {
-                btn.classList.remove('btn-gray');
-                btn.classList.add('btn-green');
-                btn.style.pointerEvents = "auto";
-            } else {
-                btn.classList.add('btn-gray');
-                btn.classList.remove('btn-green');
-                btn.style.pointerEvents = "none";
-            }
+    function handleCheck() {
+        const cb = document.getElementById('cbox');
+        if(event.target.id !== 'cbox') cb.checked = !cb.checked;
+        document.querySelectorAll('.t-buy').forEach(btn => {
+            btn.classList.toggle('active', cb.checked);
         });
     }
 
-    function openInfo(i) { alert(translations[currentL].info[i]); }
-
-    changeL('ru');
+    function sInfo(i) { alert(langData[curL].info[i]); }
+    setL('ru');
 </script>
-
 </body>
 </html>
