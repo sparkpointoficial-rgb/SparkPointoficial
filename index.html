@@ -7,291 +7,217 @@
     <style>
         :root {
             --gold: #ffcc00;
-            --blue-diamond: #00d4ff;
             --bg: #0a0a0b;
             --card-bg: #141416;
-            --btn-gray: #1e1e20;
-            --text-main: #f0f0f0;
+            --green: #00ff88;
+            --text: #f0f0f0;
         }
 
         body {
             background-color: var(--bg);
-            color: var(--text-main);
+            color: var(--text);
             font-family: 'Inter', sans-serif;
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-bottom: 60px;
+            padding-bottom: 50px;
         }
 
-        .top-bar {
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-            padding: 15px 20px;
-            box-sizing: border-box;
-        }
-
-        .l-btn {
-            background: #111;
-            color: var(--gold);
-            border: 1px solid var(--gold);
-            padding: 5px 12px;
-            margin-left: 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
+        .top-nav { width: 100%; display: flex; justify-content: flex-end; padding: 15px 20px; box-sizing: border-box; }
+        .l-btn { background: #111; color: var(--gold); border: 1px solid var(--gold); padding: 5px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-left: 5px; }
         .l-btn.active { background: var(--gold); color: #000; }
 
-        header { text-align: center; margin: 20px 0 40px; }
+        header { text-align: center; margin-bottom: 30px; }
+        .diamond { font-size: 50px; display: block; filter: drop-shadow(0 0 10px rgba(0,212,255,0.5)); }
         
-        .diamond-icon {
-            font-size: 50px;
-            display: block;
-            margin-bottom: 10px;
-            filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.6));
-        }
-
-        .spark-title {
+        .title {
             font-size: 3.5rem;
             font-weight: 900;
             text-transform: uppercase;
-            margin: 0;
-            background: repeating-linear-gradient(
-                -45deg,
-                #ffcc00,
-                #ffcc00 6px,
-                #ffe066 6px,
-                #ffe066 12px
-            );
+            margin: 5px 0;
+            background: repeating-linear-gradient(-45deg, #ffcc00, #ffcc00 6px, #ffe066 6px, #ffe066 12px);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.3));
         }
 
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            max-width: 1200px;
-            width: 95%;
-        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; width: 95%; max-width: 1100px; }
+        .card { background: var(--card-bg); border-radius: 20px; padding: 30px 15px; text-align: center; border: 1px solid #222; }
+        .card-icon { font-size: 30px; margin-bottom: 10px; display: block; }
+        .price { color: var(--gold); font-size: 2.2rem; font-weight: 800; margin: 15px 0; }
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 35px 20px;
-            text-align: center;
-            border: 1px solid #222;
-            transition: 0.3s;
-        }
-
-        .card:hover { border-color: var(--gold); transform: translateY(-5px); }
-        .card-icon { font-size: 35px; margin-bottom: 15px; display: block; }
-        .price { color: var(--gold); font-size: 2.4rem; font-weight: 800; margin: 20px 0; }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            margin-top: 12px;
-            border-radius: 14px;
-            text-decoration: none;
-            font-weight: 800;
-            text-transform: uppercase;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-
+        .btn { display: block; width: 100%; padding: 15px; margin-top: 10px; border-radius: 12px; font-weight: 800; text-transform: uppercase; border: none; cursor: pointer; font-size: 14px; transition: 0.3s; }
         .btn-view { background: var(--gold); color: #000; }
-        .btn-buy { background: var(--btn-gray); color: #444; pointer-events: none; }
+        .btn-buy { background: #1e1e20; color: #444; pointer-events: none; }
         
         .btn-buy.active {
-            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            background: linear-gradient(90deg, #00ff88, #00cc6a);
             color: #000;
             pointer-events: auto;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
         }
 
-        .footer-actions { margin: 50px 0; width: 90%; max-width: 450px; display: flex; flex-direction: column; gap: 15px; }
-        .btn-vid { background: #ff3e3e; color: #fff; }
-        .btn-rules { background: transparent; border: 1px dashed var(--gold); color: var(--gold); }
+        .actions { margin-top: 40px; width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; }
+        .btn-vid { background: #ff3e3e; color: #fff; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-rules-toggle { background: transparent; border: 1px dashed var(--gold); color: var(--gold); }
 
-        #rules-box { 
-            display: none; 
-            background: #0f0f11; 
-            padding: 30px; 
-            border-radius: 20px; 
-            margin-top: 25px; 
-            border: 1px solid #222; 
-            width: 90%; 
-            max-width: 800px; 
-            text-align: left;
-        }
-        
-        .rules-content h3 { color: var(--gold); border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .rules-content p { line-height: 1.6; color: #ccc; }
-        .rules-content b { color: #fff; }
+        #rules-section { display: none; width: 90%; max-width: 800px; background: #0f0f11; padding: 25px; border-radius: 15px; margin-top: 25px; border: 1px solid #222; text-align: left; }
+        .rules-text h3 { color: var(--gold); border-bottom: 1px solid #333; padding-bottom: 10px; font-size: 1.1rem; }
+        .rules-text p { font-size: 0.95rem; line-height: 1.5; color: #bbb; }
+        .rules-text b { color: #fff; }
 
-        .check-area { 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            margin-top: 25px; 
-            cursor: pointer; 
-            background: rgba(255,255,255,0.03); 
-            padding: 20px; 
-            border-radius: 14px; 
-            border: 1px solid rgba(0, 255, 136, 0.2); 
-        }
+        .check-box { display: flex; align-items: center; gap: 10px; margin-top: 20px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 10px; border: 1px solid #333; cursor: pointer; }
+        .check-box input { width: 20px; height: 20px; accent-color: var(--green); }
+
+        /* Видео модалка */
+        .v-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
+        .v-content { width: 90%; max-width: 500px; position: relative; }
+        .v-close { position: absolute; top: -40px; right: 0; color: #fff; font-size: 30px; cursor: pointer; }
+        .v-box { position: relative; padding-bottom: 177.78%; height: 0; }
+        .v-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="top-bar">
-    <button id="ru" class="l-btn active" onclick="setL('ru')">RU</button>
-    <button id="en" class="l-btn" onclick="setL('en')">EN</button>
+<div class="top-nav">
+    <button id="rb" class="l-btn active" onclick="setLng('ru')">RU</button>
+    <button id="eb" class="l-btn" onclick="setLng('en')">EN</button>
 </div>
 
 <header>
-    <span class="diamond-icon">💎</span>
-    <h1 class="spark-title">SparkPoint</h1>
-    <p style="color: #64748b; font-weight: 500;">Premium Web3 Matrix Ecosystem</p>
+    <span class="diamond">💎</span>
+    <h1 class="title">SparkPoint</h1>
+    <p style="color: #666;">Premium Web3 Matrix Ecosystem</p>
 </header>
 
-<div class="container">
+<div class="grid">
     <div class="card">
         <span class="card-icon">🚀</span>
         <h2>Flash</h2>
         <div class="price">0.08 BNB</div>
-        <button class="btn btn-view t-view" onclick="sInfo(0)">Посмотреть</button>
-        <a href="#" class="btn btn-buy t-buy">Активировать</a>
+        <button class="btn btn-view t-view" onclick="shInf(0)">Посмотреть</button>
+        <button class="btn btn-buy t-buy">Зарегистрироваться за 0.08 BNB</button>
     </div>
     <div class="card">
         <span class="card-icon">💰</span>
         <h2>Rapid</h2>
         <div class="price">0.15 BNB</div>
-        <button class="btn btn-view t-view" onclick="sInfo(1)">Посмотреть</button>
-        <a href="#" class="btn btn-buy t-buy">Активировать</a>
+        <button class="btn btn-view t-view" onclick="shInf(1)">Посмотреть</button>
+        <button class="btn btn-buy t-buy">Зарегистрироваться за 0.15 BNB</button>
     </div>
     <div class="card">
         <span class="card-icon">🛡️</span>
         <h2>Vault</h2>
         <div class="price">0.02 BNB</div>
-        <button class="btn btn-view t-view" onclick="sInfo(2)">Посмотреть</button>
-        <a href="#" class="btn btn-buy t-buy">Активировать</a>
+        <button class="btn btn-view t-view" onclick="shInf(2)">Посмотреть</button>
+        <button class="btn btn-buy t-buy">Зарегистрироваться за 0.02 BNB</button>
     </div>
     <div class="card">
         <span class="card-icon">💵</span>
         <h2>Validator</h2>
         <div class="price">0.05 BNB</div>
-        <button class="btn btn-view t-view" onclick="sInfo(3)">Посмотреть</button>
-        <a href="#" class="btn btn-buy t-buy">Активировать</a>
+        <button class="btn btn-view t-view" onclick="shInf(3)">Посмотреть</button>
+        <button class="btn btn-buy t-buy">Зарегистрироваться за 0.05 BNB</button>
     </div>
     <div class="card">
         <span class="card-icon">👑</span>
         <h2>Genesis</h2>
         <div class="price">0.08 BNB</div>
-        <button class="btn btn-view t-view" onclick="sInfo(4)">Посмотреть</button>
-        <a href="#" class="btn btn-buy t-buy">Активировать</a>
+        <button class="btn btn-view t-view" onclick="shInf(4)">Посмотреть</button>
+        <button class="btn btn-buy t-buy">Зарегистрироваться за 0.08 BNB</button>
     </div>
 </div>
 
-<div class="footer-actions">
-    <button class="btn btn-vid" onclick="alert('Видео загружается...')">📺 <span id="t-vid">Видео инструкция регистрации</span></button>
-    <button class="btn btn-rules" id="t-rules-btn" onclick="tRules()">Открыть инструкцию и правила</button>
+<div class="actions">
+    <button class="btn btn-vid" onclick="opVid()">📺 <span id="vt">ВИДЕО ИНСТРУКЦИЯ РЕГИСТРАЦИИ</span></button>
+    <button class="btn btn-rules-toggle" id="rt" onclick="tgRul()">ОТКРЫТЬ ИНСТРУКЦИЮ И ПРАВИЛА</button>
 </div>
 
-<div id="rules-box">
-    <div id="rules-text" class="rules-content"></div>
-    <div class="check-area" onclick="handleCheck()">
-        <input type="checkbox" id="cbox">
-        <label id="t-agree" style="cursor:pointer; font-weight: 600;">Я прочитал правила и согласен</label>
+<div id="rules-section">
+    <div id="rules-content" class="rules-text"></div>
+    <div class="check-box" onclick="hCh()">
+        <input type="checkbox" id="main-ch">
+        <label id="at" style="cursor:pointer">Я прочитал правила и беру ответственность на себя</label>
+    </div>
+</div>
+
+<div id="vMod" class="v-modal">
+    <div class="v-content">
+        <span class="v-close" onclick="clVid()">&times;</span>
+        <div class="v-box">
+            <iframe id="vPlayer" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
     </div>
 </div>
 
 <script>
-    const langData = {
+    const content = {
         ru: {
-            view: "Посмотреть", buy: "Активировать", vid: "Видео инструкция регистрации",
-            rulesBtn: "Открыть инструкцию и правила", agree: "Я прочитал правила и беру ответственность на себя",
+            view: "Посмотреть", vt: "ВИДЕО ИНСТРУКЦИЯ РЕГИСТРАЦИИ",
+            rt: "ОТКРЫТЬ ИНСТРУКЦИЮ И ПРАВИЛА", at: "Я прочитал правила и беру ответственность на себя",
             info: [
-                "🚀 FLASH: Скоростной пакет. Доход направлен на быстрое прохождение 3-х уровней. Выплата включена в общую прибыль.",
-                "💰 RAPID: Максимально быстрый пакет. Цель — финальная выплата 1200$ (в BNB). Прохождение 3-х уровней.",
-                "🛡️ VAULT: Пакет на 10 уровней с функцией «Безопасного старта». После 2-х приглашенных — возврат суммы входа.",
-                "💵 VALIDATOR: 10 уровней. Окупаемость после 2-х участников. Дальнейшая работа с чистой прибылью.",
-                "👑 GENESIS: Элитный пакет на 10 уровней. Возврат средств после приглашения 2-х активных участников."
+                "FLASH: Скоростной пакет. 3 уровня. Вход включен в общую прибыль.",
+                "RAPID: Цель — финальная выплата 1200$. Прохождение 3-х уровней.",
+                "VAULT: 10 уровней. Функция «Безопасного старта» — возврат после 2-х участников.",
+                "VALIDATOR: 10 уровней. Возврат суммы входа после 2-х участников на ваш кошелек.",
+                "GENESIS: Элитный пакет. 10 уровней. Возврат после 2-х личных приглашенных."
             ],
             rules: `
-                <h3>ИНСТРУКЦИЯ ПО РЕГИСТРАЦИИ</h3>
-                <p><b>Шаг 1:</b> Установите кошелек Trust Wallet или MetaMask.<br>
-                <b>Шаг 2:</b> Пополните баланс в сети BSC (BNB Smart Chain) на сумму выбранного пакета + 1-2$ на комиссию сети.<br>
-                <b>Шаг 3:</b> Вставьте ссылку в браузер кошелька и перейдите на сайт.<br>
-                <b>Шаг 4:</b> Выберите пакет, подтвердите правила внизу страницы и нажмите кнопку "Активировать".</p>
-                <h3>ПРАВИЛА ПРОЕКТА SPARKPOINT</h3>
-                <p>• <b>Децентрализация:</b> Проект работает на смарт-контракте, ваши средства не хранятся у администрации.<br>
-                • <b>P2P Выплаты:</b> Деньги поступают напрямую от участника к участнику.<br>
-                • <b>Риски:</b> Вы осознаете, что результат зависит от вашей активности и работы вашей команды.</p>
+                <h3>ПРАВИЛА УЧАСТИЯ И ИНСТРУКЦИЯ</h3>
+                <p><b>1. Классификация пакетов</b><br>
+                • <b>Скоростные (Flash, Rapid):</b> Предназначены для максимально быстрого прохождения 3-х уровней. Весь входящий поток средств направлен на достижение финальной выплаты ($600 или $1200). Входная сумма включена в прибыль.<br>
+                • <b>Масштабные (Vault, Validator, Genesis):</b> Пакеты на 10 уровней. Смарт-контракт возвращает сумму входа после приглашения 2-х участников.</p>
+                <p><b>2. Механика (согласно видео)</b><br>
+                • Смените сеть в кошельке на <b>BNB SmartChain</b>.<br>
+                • Нажмите «Подключить кошелек» и подтвердите транзакцию в окне смарт-контракта.</p>
+                <p><b>3. Юридический отказ</b><br>
+                • Spark Point — краудфандинговая P2P-платформа. Без приглашений доход не генерируется.</p>
             `
         },
         en: {
-            view: "View", buy: "Activate", vid: "Registration Video",
-            rulesBtn: "Open Instructions", agree: "I accept the rules and take responsibility",
-            info: [
-                "🚀 FLASH: Speed package. 3 levels. Entry included in profit.",
-                "💰 RAPID: Fast track. Target 1200$. 3 levels.",
-                "🛡️ VAULT: 10 levels with Safe Start. Refund after 2 members.",
-                "💵 VALIDATOR: 10 levels. ROI after 2 members.",
-                "👑 GENESIS: Elite 10 levels. Refund after 2 active members."
-            ],
-            rules: `
-                <h3>REGISTRATION MANUAL</h3>
-                <p><b>Step 1:</b> Install Trust Wallet or MetaMask.<br>
-                <b>Step 2:</b> Top up your balance in BSC (BNB Smart Chain) for the package price + fees.<br>
-                <b>Step 3:</b> Paste the link into the wallet browser.<br>
-                <b>Step 4:</b> Select a package, accept the rules, and click "Activate".</p>
-                <h3>SPARKPOINT RULES</h3>
-                <p>• <b>Decentralized:</b> Smart contract based system.<br>
-                • <b>P2P Payments:</b> Direct wallet-to-wallet transfers.<br>
-                • <b>Disclaimer:</b> Results depend on your team activity.</p>
-            `
+            view: "View", vt: "VIDEO REGISTRATION GUIDE",
+            rt: "OPEN MANUAL AND RULES", at: "I have read and accept the terms",
+            info: ["FLASH: Speed track.", "RAPID: $1200 goal.", "VAULT: ROI after 2.", "VALIDATOR: ROI after 2.", "GENESIS: ROI after 2."],
+            rules: "<h3>RULES</h3><p>Select package and connect wallet using <b>BNB SmartChain</b>. Smart contract will handle P2P transfers.</p>"
         }
     };
 
-    let curL = 'ru';
+    let lng = 'ru';
 
-    function setL(l) {
-        curL = l;
-        document.getElementById('ru').classList.toggle('active', l==='ru');
-        document.getElementById('en').classList.toggle('active', l==='en');
-        document.getElementById('t-vid').innerText = langData[l].vid;
-        document.getElementById('t-rules-btn').innerText = langData[l].rulesBtn;
-        document.getElementById('t-agree').innerText = langData[l].agree;
-        document.getElementById('rules-text').innerHTML = langData[l].rules;
-        document.querySelectorAll('.t-view').forEach(b => b.innerText = langData[l].view);
-        document.querySelectorAll('.t-buy').forEach(b => b.innerText = langData[l].buy);
+    function setLng(l) {
+        lng = l;
+        document.getElementById('rb').classList.toggle('active', l==='ru');
+        document.getElementById('eb').classList.toggle('active', l==='en');
+        document.getElementById('vt').innerText = content[l].vt;
+        document.getElementById('rt').innerText = content[l].rt;
+        document.getElementById('at').innerText = content[l].at;
+        document.getElementById('rules-content').innerHTML = content[l].rules;
+        document.querySelectorAll('.t-view').forEach(b => b.innerText = content[l].view);
     }
 
-    function tRules() {
-        const box = document.getElementById('rules-box');
-        box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    function tgRul() {
+        const s = document.getElementById('rules-section');
+        s.style.display = s.style.display === 'block' ? 'none' : 'block';
     }
 
-    function handleCheck() {
-        const cb = document.getElementById('cbox');
-        if(event.target.id !== 'cbox') cb.checked = !cb.checked;
-        document.querySelectorAll('.t-buy').forEach(btn => {
-            btn.classList.toggle('active', cb.checked);
-        });
+    function hCh() {
+        const c = document.getElementById('main-ch');
+        if(event.target.id !== 'main-ch') c.checked = !c.checked;
+        document.querySelectorAll('.t-buy').forEach(b => b.classList.toggle('active', c.checked));
     }
 
-    function sInfo(i) { alert(langData[curL].info[i]); }
-    setL('ru');
+    function shInf(i) { alert(content[lng].info[i]); }
+    
+    function opVid() {
+        document.getElementById('vPlayer').src = "https://www.youtube.com/embed/KoYDCQw07Xs?autoplay=1";
+        document.getElementById('vMod').style.display = 'flex';
+    }
+    function clVid() {
+        document.getElementById('vMod').style.display = 'none';
+        document.getElementById('vPlayer').src = "";
+    }
+
+    setLng('ru');
 </script>
 </body>
 </html>
