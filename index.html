@@ -86,7 +86,7 @@
             padding: 35px 20px;
             text-align: center;
             border: 1px solid #222;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.3s;
         }
 
         .card:hover { border-color: var(--gold); transform: translateY(-5px); }
@@ -122,8 +122,33 @@
         .btn-vid { background: #ff3e3e; color: #fff; }
         .btn-rules { background: transparent; border: 1px dashed var(--gold); color: var(--gold); }
 
-        #rules-box { display: none; background: #0f0f11; padding: 30px; border-radius: 20px; margin-top: 25px; border: 1px solid #222; width: 90%; max-width: 800px; }
-        .check-area { display: flex; align-items: center; gap: 12px; margin-top: 25px; cursor: pointer; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 14px; border: 1px solid rgba(0, 255, 136, 0.2); }
+        #rules-box { 
+            display: none; 
+            background: #0f0f11; 
+            padding: 30px; 
+            border-radius: 20px; 
+            margin-top: 25px; 
+            border: 1px solid #222; 
+            width: 90%; 
+            max-width: 800px; 
+            text-align: left;
+        }
+        
+        .rules-content h3 { color: var(--gold); border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .rules-content p { line-height: 1.6; color: #ccc; }
+        .rules-content b { color: #fff; }
+
+        .check-area { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            margin-top: 25px; 
+            cursor: pointer; 
+            background: rgba(255,255,255,0.03); 
+            padding: 20px; 
+            border-radius: 14px; 
+            border: 1px solid rgba(0, 255, 136, 0.2); 
+        }
     </style>
 </head>
 <body>
@@ -147,7 +172,6 @@
         <button class="btn btn-view t-view" onclick="sInfo(0)">Посмотреть</button>
         <a href="#" class="btn btn-buy t-buy">Активировать</a>
     </div>
-
     <div class="card">
         <span class="card-icon">💰</span>
         <h2>Rapid</h2>
@@ -155,7 +179,6 @@
         <button class="btn btn-view t-view" onclick="sInfo(1)">Посмотреть</button>
         <a href="#" class="btn btn-buy t-buy">Активировать</a>
     </div>
-
     <div class="card">
         <span class="card-icon">🛡️</span>
         <h2>Vault</h2>
@@ -163,7 +186,6 @@
         <button class="btn btn-view t-view" onclick="sInfo(2)">Посмотреть</button>
         <a href="#" class="btn btn-buy t-buy">Активировать</a>
     </div>
-
     <div class="card">
         <span class="card-icon">💵</span>
         <h2>Validator</h2>
@@ -171,7 +193,6 @@
         <button class="btn btn-view t-view" onclick="sInfo(3)">Посмотреть</button>
         <a href="#" class="btn btn-buy t-buy">Активировать</a>
     </div>
-
     <div class="card">
         <span class="card-icon">👑</span>
         <h2>Genesis</h2>
@@ -187,7 +208,7 @@
 </div>
 
 <div id="rules-box">
-    <div id="rules-text"></div>
+    <div id="rules-text" class="rules-content"></div>
     <div class="check-area" onclick="handleCheck()">
         <input type="checkbox" id="cbox">
         <label id="t-agree" style="cursor:pointer; font-weight: 600;">Я прочитал правила и согласен</label>
@@ -199,27 +220,46 @@
         ru: {
             view: "Посмотреть", buy: "Активировать", vid: "Видео инструкция регистрации",
             rulesBtn: "Открыть инструкцию и правила", agree: "Я прочитал правила и беру ответственность на себя",
-            // ВОССТАНОВЛЕНО: Полное описание пакетов
             info: [
                 "🚀 FLASH: Скоростной пакет. Доход направлен на быстрое прохождение 3-х уровней. Выплата включена в общую прибыль.",
-                "💰 RAPID: Максимально быстрый пакет. Цель — финальная выплата 1200$ (в эквиваленте BNB). Прохождение 3-х уровней.",
+                "💰 RAPID: Максимально быстрый пакет. Цель — финальная выплата 1200$ (в BNB). Прохождение 3-х уровней.",
                 "🛡️ VAULT: Пакет на 10 уровней с функцией «Безопасного старта». После 2-х приглашенных — возврат суммы входа.",
-                "💵 VALIDATOR: 10 уровней. Функция окупаемости после 2-х участников. Дальнейшая работа с чистой прибылью.",
+                "💵 VALIDATOR: 10 уровней. Окупаемость после 2-х участников. Дальнейшая работа с чистой прибылью.",
                 "👑 GENESIS: Элитный пакет на 10 уровней. Возврат средств после приглашения 2-х активных участников."
             ],
-            rules: "<h3>ПРАВИЛА SPARKPOINT</h3><p>• Система работает через децентрализованный смарт-контракт.<br>• Пригласите 2-х участников для мгновенного возврата средств.<br>• Все транзакции проходят P2P напрямую на ваш кошелек.</p>"
+            rules: `
+                <h3>ИНСТРУКЦИЯ ПО РЕГИСТРАЦИИ</h3>
+                <p><b>Шаг 1:</b> Установите кошелек Trust Wallet или MetaMask.<br>
+                <b>Шаг 2:</b> Пополните баланс в сети BSC (BNB Smart Chain) на сумму выбранного пакета + 1-2$ на комиссию сети.<br>
+                <b>Шаг 3:</b> Вставьте ссылку в браузер кошелька и перейдите на сайт.<br>
+                <b>Шаг 4:</b> Выберите пакет, подтвердите правила внизу страницы и нажмите кнопку "Активировать".</p>
+                <h3>ПРАВИЛА ПРОЕКТА SPARKPOINT</h3>
+                <p>• <b>Децентрализация:</b> Проект работает на смарт-контракте, ваши средства не хранятся у администрации.<br>
+                • <b>P2P Выплаты:</b> Деньги поступают напрямую от участника к участнику.<br>
+                • <b>Риски:</b> Вы осознаете, что результат зависит от вашей активности и работы вашей команды.</p>
+            `
         },
         en: {
-            view: "View", buy: "Activate", vid: "Video Manual",
-            rulesBtn: "Open Rules", agree: "I accept the rules and take responsibility",
+            view: "View", buy: "Activate", vid: "Registration Video",
+            rulesBtn: "Open Instructions", agree: "I accept the rules and take responsibility",
             info: [
-                "🚀 FLASH: High speed package. 3 levels completion. Entry fee included in final profit.",
-                "💰 RAPID: Fast track package. Target: 1200$ profit. 3 levels completion.",
-                "🛡️ VAULT: 10 levels with Safe Start. Entry fee returns after inviting 2 members.",
-                "💵 VALIDATOR: 10 levels. ROI after 2 participants. Pure profit focus thereafter.",
-                "👑 GENESIS: Elite 10-level package. Refund after 2 active members invited."
+                "🚀 FLASH: Speed package. 3 levels. Entry included in profit.",
+                "💰 RAPID: Fast track. Target 1200$. 3 levels.",
+                "🛡️ VAULT: 10 levels with Safe Start. Refund after 2 members.",
+                "💵 VALIDATOR: 10 levels. ROI after 2 members.",
+                "👑 GENESIS: Elite 10 levels. Refund after 2 active members."
             ],
-            rules: "<h3>SPARKPOINT RULES</h3><p>• Decentralized smart contract system.<br>• Invite 2 members for instant ROI.<br>• P2P transactions directly to your wallet.</p>"
+            rules: `
+                <h3>REGISTRATION MANUAL</h3>
+                <p><b>Step 1:</b> Install Trust Wallet or MetaMask.<br>
+                <b>Step 2:</b> Top up your balance in BSC (BNB Smart Chain) for the package price + fees.<br>
+                <b>Step 3:</b> Paste the link into the wallet browser.<br>
+                <b>Step 4:</b> Select a package, accept the rules, and click "Activate".</p>
+                <h3>SPARKPOINT RULES</h3>
+                <p>• <b>Decentralized:</b> Smart contract based system.<br>
+                • <b>P2P Payments:</b> Direct wallet-to-wallet transfers.<br>
+                • <b>Disclaimer:</b> Results depend on your team activity.</p>
+            `
         }
     };
 
