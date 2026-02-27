@@ -11,6 +11,7 @@
             --card-bg: #141416;
             --green: #00ff88;
             --text: #f0f0f0;
+            --blue: #3b82f6;
         }
 
         body {
@@ -38,7 +39,8 @@
             margin: 5px 0;
             background: repeating-linear-gradient(-45deg, #ffcc00, #ffcc00 6px, #ffe066 6px, #ffe066 12px);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-fill-color: transparent;
+            color: var(--gold);
         }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; width: 95%; max-width: 1100px; }
@@ -46,7 +48,7 @@
         .card-icon { font-size: 30px; margin-bottom: 10px; display: block; }
         .price { color: var(--gold); font-size: 2.2rem; font-weight: 800; margin: 15px 0; }
 
-        .btn { display: block; width: 100%; padding: 15px; margin-top: 10px; border-radius: 12px; font-weight: 800; text-transform: uppercase; border: none; cursor: pointer; font-size: 14px; transition: 0.3s; }
+        .btn { display: block; width: 100%; padding: 15px; margin-top: 10px; border-radius: 12px; font-weight: 800; text-transform: uppercase; border: none; cursor: pointer; font-size: 14px; transition: 0.3s; text-decoration: none; text-align: center; box-sizing: border-box; }
         .btn-view { background: var(--gold); color: #000; }
         .btn-buy { background: #1e1e20; color: #444; pointer-events: none; }
         
@@ -59,6 +61,7 @@
 
         .actions { margin-top: 40px; width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; }
         .btn-vid { background: #ff3e3e; color: #fff; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-wallet { background: var(--blue); color: #fff; }
         .btn-rules-toggle { background: transparent; border: 1px dashed var(--gold); color: var(--gold); }
 
         #rules-section { display: none; width: 90%; max-width: 800px; background: #0f0f11; padding: 25px; border-radius: 15px; margin-top: 25px; border: 1px solid #222; text-align: left; }
@@ -69,10 +72,18 @@
         .check-box { display: flex; align-items: center; gap: 10px; margin-top: 20px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 10px; border: 1px solid #333; cursor: pointer; }
         .check-box input { width: 20px; height: 20px; accent-color: var(--green); }
 
-        /* Видео модалка */
-        .v-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
-        .v-content { width: 90%; max-width: 500px; position: relative; }
-        .v-close { position: absolute; top: -40px; right: 0; color: #fff; font-size: 30px; cursor: pointer; }
+        /* Универсальная модалка */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
+        .m-content { width: 90%; max-width: 450px; background: #141416; border-radius: 20px; padding: 30px; position: relative; border: 1px solid #333; }
+        .m-close { position: absolute; top: 15px; right: 20px; color: #fff; font-size: 30px; cursor: pointer; }
+        
+        /* Стили для кнопок кошельков */
+        .wallet-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .wallet-item { background: #1e1e20; border: 1px solid #333; border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px; text-decoration: none; color: #fff; transition: 0.3s; }
+        .wallet-item:hover { background: #252528; border-color: var(--gold); }
+        .wallet-item img { width: 35px; height: 35px; border-radius: 8px; }
+
+        /* Видео контейнер */
         .v-box { position: relative; padding-bottom: 177.78%; height: 0; }
         .v-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 10px; }
     </style>
@@ -129,24 +140,46 @@
 </div>
 
 <div class="actions">
+    <button class="btn btn-wallet" onclick="opWal()">👛 <span id="wt-btn">СКАЧАТЬ КРИПТОКОШЕЛЕК</span></button>
     <button class="btn btn-vid" onclick="opVid()">📺 <span id="vt">ВИДЕО ИНСТРУКЦИЯ РЕГИСТРАЦИИ</span></button>
     <button class="btn btn-rules-toggle" id="rt" onclick="tgRul()">ОТКРЫТЬ ИНСТРУКЦИЮ И ПРАВИЛА</button>
 </div>
 
-<div id="rules-section">
+<div id="walMod" class="modal" onclick="clWal()">
+    <div class="m-content" onclick="event.stopPropagation()">
+        <span class="m-close" onclick="clWal()">&times;</span>
+        <h2 id="m-wal-title" style="text-align: center; color: var(--gold);">Выберите кошелек</h2>
+        <div class="wallet-list">
+            <a href="https://metamask.io/download/" target="_blank" class="wallet-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask">
+                <div><b>MetaMask</b><br><small>Самый популярный Web3 кошелек</small></div>
+            </a>
+            <a href="https://trustwallet.com/download/" target="_blank" class="wallet-item">
+                <img src="https://trustwallet.com/assets/images/media/assets/trust_wallet_logo.svg" alt="Trust Wallet">
+                <div><b>Trust Wallet</b><br><small>Официальный кошелек Binance</small></div>
+            </a>
+            <a href="https://www.safepal.com/download" target="_blank" class="wallet-item">
+                <img src="https://v.fastcdn.co/u/60721782/56914567-0-SafePal-Logo.png" alt="SafePal">
+                <div><b>SafePal</b><br><small>Максимальная безопасность</small></div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="vMod" class="modal" onclick="clVid()">
+    <div class="m-content" style="max-width: 500px; padding: 10px;">
+        <span class="m-close" style="top: -40px; right: 0;" onclick="clVid()">&times;</span>
+        <div class="v-box">
+            <iframe id="vPlayer" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+<div id="rules-section" style="margin: 25px auto;">
     <div id="rules-content" class="rules-text"></div>
     <div class="check-box" onclick="hCh()">
         <input type="checkbox" id="main-ch">
         <label id="at" style="cursor:pointer">Я прочитал правила и беру ответственность на себя</label>
-    </div>
-</div>
-
-<div id="vMod" class="v-modal">
-    <div class="v-content">
-        <span class="v-close" onclick="clVid()">&times;</span>
-        <div class="v-box">
-            <iframe id="vPlayer" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
     </div>
 </div>
 
@@ -155,6 +188,7 @@
         ru: {
             view: "Посмотреть", vt: "ВИДЕО ИНСТРУКЦИЯ РЕГИСТРАЦИИ",
             rt: "ОТКРЫТЬ ИНСТРУКЦИЮ И ПРАВИЛА", at: "Я прочитал правила и беру ответственность на себя",
+            wtBtn: "СКАЧАТЬ КРИПТОКОШЕЛЕК", mWalTitle: "Выберите кошелек",
             info: [
                 "FLASH: Скоростной пакет. 3 уровня. Вход включен в общую прибыль.",
                 "RAPID: Цель — финальная выплата 1200$. Прохождение 3-х уровней.",
@@ -165,11 +199,11 @@
             rules: `
                 <h3>ПРАВИЛА УЧАСТИЯ И ИНСТРУКЦИЯ</h3>
                 <p><b>1. Классификация пакетов</b><br>
-                • <b>Скоростные (Flash, Rapid):</b> Предназначены для максимально быстрого прохождения 3-х уровней. Весь входящий поток средств направлен на достижение финальной выплаты ($600 или $1200). Входная сумма включена в прибыль.<br>
+                • <b>Скоростные (Flash, Rapid):</b> Предназначены для максимально быстрого прохождения 3-х уровней. Входная сумма включена в прибыль.<br>
                 • <b>Масштабные (Vault, Validator, Genesis):</b> Пакеты на 10 уровней. Смарт-контракт возвращает сумму входа после приглашения 2-х участников.</p>
                 <p><b>2. Механика (согласно видео)</b><br>
                 • Смените сеть в кошельке на <b>BNB SmartChain</b>.<br>
-                • Нажмите «Подключить кошелек» и подтвердите транзакцию в окне смарт-контракта.</p>
+                • Нажмите «Подключить кошелек» и подтвердите транзакцию.</p>
                 <p><b>3. Юридический отказ</b><br>
                 • Spark Point — краудфандинговая P2P-платформа. Без приглашений доход не генерируется.</p>
             `
@@ -177,6 +211,7 @@
         en: {
             view: "View", vt: "VIDEO REGISTRATION GUIDE",
             rt: "OPEN MANUAL AND RULES", at: "I have read and accept the terms",
+            wtBtn: "DOWNLOAD CRYPTO WALLET", mWalTitle: "Choose a Wallet",
             info: ["FLASH: Speed track.", "RAPID: $1200 goal.", "VAULT: ROI after 2.", "VALIDATOR: ROI after 2.", "GENESIS: ROI after 2."],
             rules: "<h3>RULES</h3><p>Select package and connect wallet using <b>BNB SmartChain</b>. Smart contract will handle P2P transfers.</p>"
         }
@@ -191,6 +226,8 @@
         document.getElementById('vt').innerText = content[l].vt;
         document.getElementById('rt').innerText = content[l].rt;
         document.getElementById('at').innerText = content[l].at;
+        document.getElementById('wt-btn').innerText = content[l].wtBtn;
+        document.getElementById('m-wal-title').innerText = content[l].mWalTitle;
         document.getElementById('rules-content').innerHTML = content[l].rules;
         document.querySelectorAll('.t-view').forEach(b => b.innerText = content[l].view);
     }
@@ -216,6 +253,9 @@
         document.getElementById('vMod').style.display = 'none';
         document.getElementById('vPlayer').src = "";
     }
+
+    function opWal() { document.getElementById('walMod').style.display = 'flex'; }
+    function clWal() { document.getElementById('walMod').style.display = 'none'; }
 
     setLng('ru');
 </script>
