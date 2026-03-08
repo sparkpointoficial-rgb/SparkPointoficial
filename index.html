@@ -31,13 +31,21 @@
 
         header { text-align: center; margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; }
         
-        /* Стили для нового логотипа-изображения */
+        /* Стили для логотипа */
         .site-logo { 
             height: 100px; /* Задайте желаемую высоту логотипа */
             width: auto;
             margin-bottom: 5px;
-            /* Добавляем легкое свечение для интеграции с темным фоном */
+            /* Добавляем легкое свечение */
             filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.5));
+            /* Стили на случай, если изображение не загрузится */
+            display: block;
+            background-color: #000;
+            border: 1px solid #333;
+            color: #666;
+            font-size: 14px;
+            line-height: 100px;
+            text-align: center;
         }
         
         .title {
@@ -104,7 +112,7 @@
 </div>
 
 <header>
-    <img src="sparkpoint_logo.png" alt="SparkPoint Logo" class="site-logo">
+    <img src="sparkpoint_logo.png" alt="SparkPoint Logo" class="site-logo" crossorigin="anonymous">
     <h1 class="title">SparkPoint</h1>
     <p style="color: #666;">Premium Web3 Matrix Ecosystem</p>
 </header>
