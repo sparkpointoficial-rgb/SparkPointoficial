@@ -29,8 +29,16 @@
         .l-btn { background: #111; color: var(--gold); border: 1px solid var(--gold); padding: 5px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-left: 5px; }
         .l-btn.active { background: var(--gold); color: #000; }
 
-        header { text-align: center; margin-bottom: 30px; }
-        .diamond { font-size: 50px; display: block; filter: drop-shadow(0 0 10px rgba(0,212,255,0.5)); }
+        header { text-align: center; margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; }
+        
+        /* Стили для нового логотипа-изображения */
+        .site-logo { 
+            height: 100px; /* Задайте желаемую высоту логотипа */
+            width: auto;
+            margin-bottom: 5px;
+            /* Добавляем легкое свечение для интеграции с темным фоном */
+            filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.5));
+        }
         
         .title {
             font-size: 3.5rem;
@@ -96,7 +104,7 @@
 </div>
 
 <header>
-    <span class="diamond">🪙</span>
+    <img src="sparkpoint_logo.png" alt="SparkPoint Logo" class="site-logo">
     <h1 class="title">SparkPoint</h1>
     <p style="color: #666;">Premium Web3 Matrix Ecosystem</p>
 </header>
@@ -184,6 +192,7 @@
 </div>
 
 <script>
+    // ... (скрипт без изменений) ...
     const content = {
         ru: {
             view: "Посмотреть", vt: "ВИДЕО ИНСТРУКЦИЯ РЕГИСТРАЦИИ",
